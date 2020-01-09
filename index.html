@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>旅行路线规划</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #container {
+            height: 100%;
+        }
+    </style>
+    <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&libraries=visualization&key=MU7BZ-UJLWD-OTW46-HQSPH-6ATY2-26FSU"></script>
+    <script>
+        window.onload = function () {
+            // 创建地图
+            var map = new qq.maps.Map(document.getElementById("container"), {
+                center: new qq.maps.LatLng(21.824873, 108.316333),
+                zoom: 7
+            });
+
+            // 创建迁徙图
+            var migration = new qq.maps.visualization.Migration({
+                map: map,
+                animated: false,
+                stylePicker: function (data) {
+                    return {
+                        color: "rgba(255, 0, 0, .5)",
+                        width: 2
+                    }
+                }
+            });
+
+            // 设置数据
+            var gs = { lat: 22.986432, lng: 114.016628, label: "公司" };
+            var cp = { lat: 22.984284, lng: 114.005706, label: "常平" };
+            var gz = { lat: 23.149012, lng: 113.257756, label: "广州" };
+            var gzn = { lat: 22.989128, lng: 113.270084 };
+            var nn = { lat: 22.824873, lng: 108.316333, label: "南宁" };
+            var xspn = { lat: 21.971857, lng: 100.763994, label: "西双版纳" };
+            var pe = { lat: 22.790490, lng: 100.961008, label: "普洱" };
+            var kmcs = { lat: 25.100212, lng: 102.934341 };
+            var km = { lat: 25.015652, lng: 102.722586, label: "昆明" };
+            var pzh = { lat: 23.969514, lng: 104.180464, label: "普者黑" };
+            var sy = { lat: 18.303328, lng: 109.419140, label: "三亚" };
+            var hk = { lat: 20.027271, lng: 110.161843, label: "海口" };
+            var data = [
+                { from: gs, to: cp, travelBy: "car" },
+                { from: cp, to: gz, travelBy: "train" },
+                { from: gz, to: gzn, travelBy: "train" },
+                { from: gzn, to: nn, travelBy: "train" },
+                { from: nn, to: xspn, travelBy: "airplane" },
+                { from: xspn, to: pe, travelBy: "car" },
+                { from: pe, to: kmcs, travelBy: "airplane" },
+                { from: kmcs, to: km, travelBy: "train" },
+                { from: km, to: pzh, travelBy: "train" },
+                { from: pzh, to: kmcs, travelBy: "train" },
+                { from: kmcs, to: sy, travelBy: "airplane" },
+                { from: sy, to: hk, travelBy: "train" },
+                { from: hk, to: gz, travelBy: "train" },
+                { from: gz, to: cp, travelBy: "train" },
+                { from: cp, to: gs, travelBy: "car" }
+            ];
+            migration.setData(data);
+
+            //创建一个Marker
+            var marker = new qq.maps.Marker({
+                //设置Marker的位置坐标
+                position: new qq.maps.LatLng(gs.lat, gs.lng),
+                //设置显示Marker的地图
+                map: map
+            });
+
+            var travelBy = "car";
+            var speed = 1000000;
+            var markerIcon = new qq.maps.MarkerImage("img/" + travelBy + ".png");
+            marker.setIcon(markerIcon);
+
+            var i = 0;
+            marker.moveTo(new qq.maps.LatLng(data[i].to.lat, data[i].to.lng), speed);
+
+            qq.maps.event.addListener(marker, "moveend", function () {
+                if (data.length > i + 1) {
+                    i++;
+                    markerIcon = new qq.maps.MarkerImage("img/" + data[i].travelBy + ".png");
+                    marker.setIcon(markerIcon);
+                    marker.moveTo(new qq.maps.LatLng(data[i].to.lat, data[i].to.lng), speed);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="container"></div>
+</body>
+</html>
