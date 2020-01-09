@@ -23,8 +23,9 @@
     <script>
         window.onload = function () {
             // 创建地图
+            var center = new qq.maps.LatLng(21.824873, 108.316333);
             var map = new qq.maps.Map(document.getElementById("container"), {
-                center: new qq.maps.LatLng(21.824873, 108.316333),
+                center: center,
                 zoom: 5
             });
 
@@ -85,12 +86,16 @@
             var markerIcon = new qq.maps.MarkerImage("img/" + travelBy + ".png");
             marker.setIcon(markerIcon);
 
-            var i = 0;
-            marker.moveTo(new qq.maps.LatLng(data[i].to.lat, data[i].to.lng), speed);
+            var i = 1;
+            center = new qq.maps.LatLng((data[0].to.lat + data[1].to.lat) / 2, (data[0].to.lng + data[1].to.lng) / 2);
+            map.setCenter(center);
+            marker.moveTo(new qq.maps.LatLng(data[1].to.lat, data[1].to.lng), speed);
 
             qq.maps.event.addListener(marker, "moveend", function () {
                 if (data.length > i + 1) {
                     i++;
+                    center = new qq.maps.LatLng((data[i - 1].to.lat + data[i].to.lat) / 2, (data[i - 1].to.lng + data[i].to.lng) / 2);
+                    map.setCenter(center);
                     markerIcon = new qq.maps.MarkerImage("img/" + data[i].travelBy + ".png");
                     marker.setIcon(markerIcon);
                     marker.moveTo(new qq.maps.LatLng(data[i].to.lat, data[i].to.lng), speed);
