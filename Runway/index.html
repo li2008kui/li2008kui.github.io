@@ -80,7 +80,7 @@
                 { from: gz, to: gzn, travelBy: "train", zoom: 11 },
                 { from: gzn, to: nn, travelBy: "train", zoom: 6 },
                 { from: nn, to: xspn, travelBy: "airplane", zoom: 5 },
-                { from: xspn, to: pe, travelBy: "car", zoom: 9 },
+                { from: xspn, to: pe, travelBy: "bus", zoom: 9 },
                 { from: pe, to: kmcs, travelBy: "airplane", zoom: 7 },
                 { from: kmcs, to: km, travelBy: "train", zoom: 11 },
                 { from: km, to: pzh, travelBy: "train", zoom: 8 },
@@ -109,7 +109,6 @@
             var d = getDistance(data[0].from.lat, data[0].from.lng, data[0].to.lat, data[0].to.lng);
             var speed = 1000 * d;
             center = new qq.maps.LatLng((data[0].from.lat + data[0].to.lat) / 2, (data[0].from.lng + data[0].to.lng) / 2);
-            console.log(center);
             map.setCenter(center);
             map.setZoom(data[0].zoom);
             marker.moveTo(new qq.maps.LatLng(data[0].to.lat, data[0].to.lng), speed);
